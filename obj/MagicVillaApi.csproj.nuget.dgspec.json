@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\joana\\Documents\\Others\\Cursos\\YouTube\\Web APIs (NET 7) La Guia Completa (Crear y Consumir API)\\MagicVillaApi\\MagicVillaApi.csproj": {}
+    "C:\\Users\\joana\\Documents\\Others\\Cursos\\YouTube\\Nueva carpeta\\MagicVillaApi\\MagicVillaApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\joana\\Documents\\Others\\Cursos\\YouTube\\Web APIs (NET 7) La Guia Completa (Crear y Consumir API)\\MagicVillaApi\\MagicVillaApi.csproj": {
+    "C:\\Users\\joana\\Documents\\Others\\Cursos\\YouTube\\Nueva carpeta\\MagicVillaApi\\MagicVillaApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\joana\\Documents\\Others\\Cursos\\YouTube\\Web APIs (NET 7) La Guia Completa (Crear y Consumir API)\\MagicVillaApi\\MagicVillaApi.csproj",
+        "projectUniqueName": "C:\\Users\\joana\\Documents\\Others\\Cursos\\YouTube\\Nueva carpeta\\MagicVillaApi\\MagicVillaApi.csproj",
         "projectName": "MagicVillaApi",
-        "projectPath": "C:\\Users\\joana\\Documents\\Others\\Cursos\\YouTube\\Web APIs (NET 7) La Guia Completa (Crear y Consumir API)\\MagicVillaApi\\MagicVillaApi.csproj",
+        "projectPath": "C:\\Users\\joana\\Documents\\Others\\Cursos\\YouTube\\Nueva carpeta\\MagicVillaApi\\MagicVillaApi.csproj",
         "packagesPath": "C:\\Users\\joana\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\joana\\Documents\\Others\\Cursos\\YouTube\\Web APIs (NET 7) La Guia Completa (Crear y Consumir API)\\MagicVillaApi\\obj\\",
+        "outputPath": "C:\\Users\\joana\\Documents\\Others\\Cursos\\YouTube\\Nueva carpeta\\MagicVillaApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

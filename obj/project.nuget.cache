@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "VlLMvamTL2tZTIrCNwXrY8ot4eVYTamNHG68Lwmv3yh/IDw0lwuqMuhhUo7qPJvIygmQSr/PnO1g5qs3WmJKjA==",
+  "dgSpecHash": "it/wbuW0/fpo/yp1Pp/XlcHU0n2u2N7i90oay1cCXNS2mHXRiSZEu5Y++vKmeSlnreEECIXFJuAd3CZGUzl9wQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\joana\\Documents\\Others\\Cursos\\YouTube\\Web APIs (NET 7) La Guia Completa (Crear y Consumir API)\\MagicVillaApi\\MagicVillaApi.csproj",
+  "projectFilePath": "C:\\Users\\joana\\Documents\\Others\\Cursos\\YouTube\\Nueva carpeta\\MagicVillaApi\\MagicVillaApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\joana\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\joana\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
