@@ -1,8 +1,8 @@
-﻿using MagicVillaApi.Data;
+﻿using AutoMapper;
+using MagicVillaApi.Data;
 using MagicVillaApi.Models.Class;
 using MagicVillaApi.Models.DTOs;
 using MagicVillaApi.Services.Intefaces;
-using MagicVillaApi.Utils;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,10 +12,13 @@ namespace MagicVillaApi.Services.Implements
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<VillaService> _logger;
-        public VillaService(ApplicationDbContext applicationDbContext, ILogger<VillaService> logger)
+        private readonly IMapper _mapper;
+
+        public VillaService(ApplicationDbContext applicationDbContext, ILogger<VillaService> logger, IMapper mapper)
         {
             _dbContext = applicationDbContext;
             _logger = logger;
+            _mapper = mapper;
         }
 
         public async Task CreateVilla(Villa villa)
@@ -86,19 +89,9 @@ namespace MagicVillaApi.Services.Implements
         {
             try
             {
-                VillaDTO villaSrch = (await _dbContext.Villas.AsNoTracking().FirstOrDefaultAsync(v => v.Id == id)).ConvertVillaDTO();
-                villa.ApplyTo(villaSrch);
-                Villa newVilla = new()
-                {
-                    Id = id,
-                    Name = villaSrch.Name,
-                    Tariff = villaSrch.Tariff,
-                    Details = villaSrch.Details,
-                    ImageUrl = villaSrch.ImageUrl,
-                    Amenity = villaSrch.Amenity,
-                    NumberOfOccupants = villaSrch.NumberOfOccupants,
-                    SquareMeter = villaSrch.SquareMeter,
-                };
+                VillaDTO villaDTO = _mapper.Map<VillaDTO>(await _dbContext.Villas.AsNoTracking().FirstOrDefaultAsync(v => v.Id == id));
+                villa.ApplyTo(villaDTO);
+                Villa newVilla = _mapper.Map<Villa>(villaDTO);
                 _dbContext.Villas.Update(newVilla);
                 await _dbContext.SaveChangesAsync();
             }
@@ -114,6 +107,8 @@ namespace MagicVillaApi.Services.Implements
         {
             try
             {
+                villa.CreationDate = (await _dbContext.Villas.AsNoTracking().FirstOrDefaultAsync(v => v.Id == villa.Id)).CreationDate;
+                villa.UpdateDate = DateTime.Now;
                 _dbContext.Villas.Update(villa);
                 await _dbContext.SaveChangesAsync();
                 return villa;

@@ -1,9 +1,10 @@
-﻿using MagicVillaApi.Models.Class;
+﻿using AutoMapper;
+using MagicVillaApi.Models.Class;
 using MagicVillaApi.Models.DTOs;
 using MagicVillaApi.Services.Intefaces;
-using MagicVillaApi.Utils;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MagicVillaApi.Controllers
 {
@@ -13,11 +14,13 @@ namespace MagicVillaApi.Controllers
     {
         private readonly ILogger<VillaController> _logger;
         private readonly IVillaService _villaService;
+        private readonly IMapper _mapper;
 
-        public VillaController(ILogger<VillaController> logger, IVillaService villaService )
+        public VillaController(ILogger<VillaController> logger, IVillaService villaService, IMapper mapper )
         {
             _villaService = villaService;
             _logger = logger;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -29,8 +32,9 @@ namespace MagicVillaApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<VillaDTO>>> GetVillas()
         {
-            var result = (await _villaService.GetVillas()).Select(v => v.ConvertVillaDTO());
-            return Ok(result);
+            IEnumerable<Villa> villas = await _villaService.GetVillas();
+            IEnumerable<VillaDTO> villasDTO = _mapper.Map<IEnumerable<VillaDTO>>(villas);
+            return Ok(villasDTO);
         }
 
 
@@ -50,7 +54,8 @@ namespace MagicVillaApi.Controllers
                 _logger.LogError("EL parametro de busqueda es obligatorio");
                 return BadRequest();
             }
-            VillaDTO villaDTO = (await _villaService.GetVilla(id)).ConvertVillaDTO();
+            Villa villa = await _villaService.GetVilla(id);
+            VillaDTO villaDTO = _mapper.Map<VillaDTO>(villa);
             if (villaDTO == null)
             {
                 _logger.LogWarning("Villa no encontrada");
@@ -76,18 +81,9 @@ namespace MagicVillaApi.Controllers
             {
                 return BadRequest();
             }
-            Villa villa = new()
-            {
-                Name = villaDTO.Name,
-                Amenity = villaDTO.Amenity,
-                CreationDate = DateTime.Now,
-                Details = villaDTO.Details,
-                ImageUrl = villaDTO.ImageUrl,
-                NumberOfOccupants = villaDTO.NumberOfOccupants,
-                SquareMeter = villaDTO.SquareMeter,
-                Tariff = villaDTO.Tariff,
-                UpdateDate = DateTime.Now,
-            };
+            Villa villa = _mapper.Map<Villa>(villaDTO); if (villa == null) return BadRequest(ModelState);
+            villa.CreationDate = DateTime.Now;
+            villa.UpdateDate = DateTime.Now;
             await _villaService.CreateVilla(villa);
             return CreatedAtRoute("GetVilla", new { id = villa.Id }, villa);
         }
@@ -129,20 +125,12 @@ namespace MagicVillaApi.Controllers
                 return BadRequest();
             }
 
-            Villa villa = new()
-            {
-                Id = id,
-                Name = villaDTO.Name,
-                Details = villaDTO.Details,
-                Tariff = villaDTO.Tariff,
-                ImageUrl = villaDTO.ImageUrl,
-                Amenity = villaDTO.Amenity,
-                NumberOfOccupants = villaDTO.NumberOfOccupants,
-                SquareMeter = villaDTO.SquareMeter
-            };
-            VillaDTO villaRes = (await _villaService.UpdateVilla(villa)).ConvertVillaDTO();
+            Villa villa = _mapper.Map<Villa>(villaDTO); 
+            villa.Id = id;
+            Villa villaRes = await _villaService.UpdateVilla(villa);
+            VillaDTO villaDtoRes = _mapper.Map<VillaDTO>(villaRes);
             _logger.LogInformation("Villa actualizada con exito");
-            return Ok(villaRes);
+            return Ok(villaDtoRes);
         }
 
 
