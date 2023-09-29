@@ -1,8 +1,9 @@
 using MagicVillaApi.Data;
-using MagicVillaApi.Services.Implements;
-using MagicVillaApi.Services.Intefaces;
+using MagicVillaApi.Repository.Implements;
+using MagicVillaApi.Repository.Interfaces;
 using MagicVillaApi.Utils;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
