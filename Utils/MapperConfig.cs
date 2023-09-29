@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using MagicVillaApi.Models.Class;
-using MagicVillaApi.Models.DTOs;
+using MagicVillaApi.DTOs;
+using MagicVillaApi.Models;
 
 namespace MagicVillaApi.Utils
 {
@@ -8,7 +8,13 @@ namespace MagicVillaApi.Utils
     {
         public MapperConfig()
         {
+            #region Villas
             CreateMap<Villa, VillaDTO>().ReverseMap();
+            #endregion
+
+            #region NumVilla
+            CreateMap<NumberVilla, NumberVillaDTO>().ReverseMap();
+            #endregion
         }
     }
 }

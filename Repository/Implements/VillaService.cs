@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MagicVillaApi.Data;
-using MagicVillaApi.Models.Class;
-using MagicVillaApi.Models.DTOs;
+using MagicVillaApi.DTOs;
+using MagicVillaApi.Models;
 using MagicVillaApi.Repository.Interfaces;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +17,7 @@ namespace MagicVillaApi.Repository.Implements
         public VillaService(ApplicationDbContext dbContext, ILogger<VillaService> logger, IMapper mapper) : base(dbContext, logger)
         {
             _dbContext = dbContext;
-            _logger = logger;
+            _logger = logger;   
             _mapper = mapper;
         }
 

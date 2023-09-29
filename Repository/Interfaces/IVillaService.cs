@@ -1,5 +1,5 @@
-﻿using MagicVillaApi.Models.Class;
-using MagicVillaApi.Models.DTOs;
+﻿using MagicVillaApi.DTOs;
+using MagicVillaApi.Models;
 using MagicVillaApi.Repository.Intefaces;
 using Microsoft.AspNetCore.JsonPatch;
 

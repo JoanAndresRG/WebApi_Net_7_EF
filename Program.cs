@@ -15,6 +15,7 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IVillaService, VillaService>();
+builder.Services.AddScoped<INumberVillaService, NumberVillaService>();
 builder.Services.AddDbContext<ApplicationDbContext>( options =>
 {
     options.UseSqlServer(confi.GetConnectionString("SQL"));

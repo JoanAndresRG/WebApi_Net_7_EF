@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace MagicVillaApi.Models.Class
+namespace MagicVillaApi.Models
 {
     public class Villa
     {
