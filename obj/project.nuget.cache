@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "a1YyMNFf5S+edIS8LpZZfbKyaScefo8UP+edxwdTbOKEM5CGvdOmxyi7J7HicMRQaUaTN1dkwL+VgEI0sFA7YQ==",
+  "dgSpecHash": "ub5V4AfKnAIKbgNF8/znYwlrQMO3C/c/WxXgrq7tALOwMjDMlsY4Bet2cUbrrBx1/Yvv2+weoMJ6VAesJYXs6w==",
   "success": true,
   "projectFilePath": "C:\\Users\\joana\\Documents\\Others\\Cursos\\YouTube\\Web APIs (NET 7) La Guia Completa (Crear y Consumir API)\\MagicVillaApi\\MagicVillaApi.csproj",
   "expectedPackageFiles": [
@@ -9,6 +9,7 @@
     "C:\\Users\\joana\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\joana\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
     "C:\\Users\\joana\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\joana\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\7.0.11\\microsoft.aspnetcore.authentication.jwtbearer.7.0.11.nupkg.sha512",
     "C:\\Users\\joana\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\7.0.11\\microsoft.aspnetcore.jsonpatch.7.0.11.nupkg.sha512",
     "C:\\Users\\joana\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\7.0.11\\microsoft.aspnetcore.mvc.newtonsoftjson.7.0.11.nupkg.sha512",
     "C:\\Users\\joana\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.11\\microsoft.aspnetcore.openapi.7.0.11.nupkg.sha512",

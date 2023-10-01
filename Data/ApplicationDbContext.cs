@@ -12,25 +12,13 @@ namespace MagicVillaApi.Data
 
         public DbSet<Villa> Villas { get; set; }
         public DbSet<NumberVilla> NumberVillas { get; set; }
+        public DbSet<User> Users { get; set; }
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
-        //    modelBuilder.Entity<Villa>().HasData(
-        //        new Villa()
-        //        {
-        //            Id = 1,
-        //            Name = "Villa Test",
-        //            Details = "Villa insertada para test",
-        //            Tariff = 20,
-        //            NumberOfOccupants = 200,
-        //            SquareMeter = 2200,
-        //            ImageUrl = "",
-        //            Amenity = "",
-        //            CreationDate = DateTime.Now,    
-        //            UpdateDate = DateTime.Now
-        //        }
-        //    ) ;
+        //    modelBuilder.Entity<User>()
+        //        .HasIndex(u => u.UserName)
+        //        .IsUnique();
         //}
-
     }
 }

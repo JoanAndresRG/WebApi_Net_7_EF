@@ -34,7 +34,7 @@ namespace MagicVillaApi.Repository.Implements
             catch (Exception ex)
             {
                 _logger.LogError($"Error: {ex.Message}");
-                throw new Exception($"Error: {ex.Message}");
+                throw;
             }
         }
 
@@ -55,7 +55,7 @@ namespace MagicVillaApi.Repository.Implements
             catch (Exception ex)
             {
                 _logger.LogError($"Error: {ex.Message}");
-                throw new Exception($"Error: {ex.Message}");
+                throw;
             }
         }
     }

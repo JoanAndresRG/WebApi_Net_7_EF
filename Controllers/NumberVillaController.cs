@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using MagicVillaApi.DTOs;
 using MagicVillaApi.Models;
-using MagicVillaApi.Repository.Intefaces;
 using MagicVillaApi.Repository.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -10,6 +11,7 @@ namespace MagicVillaApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class NumberVillaController : ControllerBase
     {
         private readonly INumberVillaService _numberVillaService;
@@ -27,8 +29,10 @@ namespace MagicVillaApi.Controllers
             _apiResponse = new();
         }
 
+        [Authorize]
         [HttpGet("getNumberVillas")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<APIResponse>> GetNumberVillas()
         {
             try
@@ -47,9 +51,11 @@ namespace MagicVillaApi.Controllers
             return _apiResponse;
         }
 
+        [Authorize]
         [HttpGet("getNumVilla/{numVilla}", Name = "GetNumbVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse>> GetNumbVilla([FromRoute] int numVilla)
         {
@@ -87,8 +93,10 @@ namespace MagicVillaApi.Controllers
 
 
         [HttpPost("insertNumberVilla")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> CreateNumerVilla([FromBody] NumberVillaDTO numberVillaDTO)
         {
@@ -125,10 +133,12 @@ namespace MagicVillaApi.Controllers
         }
 
 
+        [Authorize]
         [HttpDelete("delete/{numVilla:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteNumVilla([FromRoute] int numVilla)
         {
@@ -162,9 +172,11 @@ namespace MagicVillaApi.Controllers
         }
 
 
+        [Authorize]
         [HttpPut("update/{NumVilla:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse>> Update([FromRoute] int NumVilla, [FromBody] NumberVillaDTO numberVillaDTO)
         {

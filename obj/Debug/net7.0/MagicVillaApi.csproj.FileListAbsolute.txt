@@ -90,6 +90,7 @@ C:\Users\joana\Documents\Others\Cursos\YouTube\Web APIs (NET 7) La Guia Completa
 C:\Users\joana\Documents\Others\Cursos\YouTube\Web APIs (NET 7) La Guia Completa (Crear y Consumir API)\MagicVillaApi\bin\Debug\net7.0\Azure.Core.dll
 C:\Users\joana\Documents\Others\Cursos\YouTube\Web APIs (NET 7) La Guia Completa (Crear y Consumir API)\MagicVillaApi\bin\Debug\net7.0\Azure.Identity.dll
 C:\Users\joana\Documents\Others\Cursos\YouTube\Web APIs (NET 7) La Guia Completa (Crear y Consumir API)\MagicVillaApi\bin\Debug\net7.0\Humanizer.dll
+C:\Users\joana\Documents\Others\Cursos\YouTube\Web APIs (NET 7) La Guia Completa (Crear y Consumir API)\MagicVillaApi\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\joana\Documents\Others\Cursos\YouTube\Web APIs (NET 7) La Guia Completa (Crear y Consumir API)\MagicVillaApi\bin\Debug\net7.0\Microsoft.AspNetCore.JsonPatch.dll
 C:\Users\joana\Documents\Others\Cursos\YouTube\Web APIs (NET 7) La Guia Completa (Crear y Consumir API)\MagicVillaApi\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\Users\joana\Documents\Others\Cursos\YouTube\Web APIs (NET 7) La Guia Completa (Crear y Consumir API)\MagicVillaApi\bin\Debug\net7.0\Microsoft.AspNetCore.OpenApi.dll

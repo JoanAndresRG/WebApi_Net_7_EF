@@ -15,6 +15,12 @@ namespace MagicVillaApi.Utils
             #region NumVilla
             CreateMap<NumberVilla, NumberVillaDTO>().ReverseMap();
             #endregion
+
+            #region User
+            CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<User, UserDtoCreate>().ReverseMap();
+            CreateMap<User, UserDtoUpdate>().ReverseMap();
+            #endregion
         }
     }
 }
