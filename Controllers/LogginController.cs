@@ -85,6 +85,7 @@ namespace MagicVillaApi.Controllers
                 new Claim("UserName", user.UserName),
                 new Claim("Email", user.Email),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.UserRol) // Agregar el rol del usuario al token
             };
 
             // Payload

@@ -92,11 +92,12 @@ namespace MagicVillaApi.Controllers
         }
 
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost("insertNumberVilla")]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> CreateNumerVilla([FromBody] NumberVillaDTO numberVillaDTO)
         {
@@ -133,12 +134,13 @@ namespace MagicVillaApi.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("delete/{numVilla:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteNumVilla([FromRoute] int numVilla)
         {
@@ -172,11 +174,12 @@ namespace MagicVillaApi.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut("update/{NumVilla:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse>> Update([FromRoute] int NumVilla, [FromBody] NumberVillaDTO numberVillaDTO)
         {

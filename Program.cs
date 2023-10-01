@@ -57,10 +57,10 @@ builder.Services.AddScoped<INumberVillaService, NumberVillaService>();
 builder.Services.AddScoped<IUserApiService, UserApiService>();
 builder.Services.AddScoped<ILogginService, LogginService>();
 builder.Services.AddScoped<IEncryptPasswordUser, EncryptPasswordUser>();
-builder.Services.AddDbContext<ApplicationDbContext>( options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(config.GetConnectionString("SQL"));
-} );
+});
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 //configura el servicio de autenticación para utilizar JWT Bearer Authentication
@@ -79,7 +79,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("OrAdminOrUser", policy =>
+    {
+        policy.RequireRole("Admin", "User");
+    });
+});
 
 var app = builder.Build();
 

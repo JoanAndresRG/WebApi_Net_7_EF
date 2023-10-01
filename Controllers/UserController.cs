@@ -26,12 +26,13 @@ namespace MagicVillaApi.Controllers
             _apiResponse = new();
         }
 
-        [Authorize]
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost("createUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> CreateUser([FromBody] UserDtoCreate userDtoCreate)
         {
@@ -61,11 +62,12 @@ namespace MagicVillaApi.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Policy = "OrAdminOrUser")]
         [HttpGet("getUser/{id:int}", Name = "GetUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> GetUser([FromRoute] int id)
         {
@@ -94,11 +96,12 @@ namespace MagicVillaApi.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Policy = "OrAdminOrUser")]
         [HttpGet("getUsers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> GetUsers()
         {
@@ -127,11 +130,12 @@ namespace MagicVillaApi.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut("updateUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> UpdateUser([FromBody] UserDtoUpdate userDtoUpdate)
         {
@@ -160,11 +164,12 @@ namespace MagicVillaApi.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("deleteUser/{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteUser([FromRoute] int id)
         {

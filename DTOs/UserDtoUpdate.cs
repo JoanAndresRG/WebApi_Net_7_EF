@@ -13,9 +13,6 @@ namespace MagicVillaApi.DTOs
         public string Email { get; set; }
         [Required]
         [Range(0, (int)RolUser.Guest, ErrorMessage = "Rol no valido")]
-        public int UserRol
-        {
-            get; set;
-        }
+        public int UserRol { get; set; }
     }
 }

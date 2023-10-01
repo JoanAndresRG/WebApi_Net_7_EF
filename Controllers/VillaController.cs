@@ -107,11 +107,12 @@ namespace MagicVillaApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns name="VillaDTO"></returns>
-        [Authorize]
+        [Authorize(Policy = "OrAdminOrUser")]
         [HttpPost("insertVilla")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<APIResponse>> CreateVilla([FromBody] VillaDTO villaDTO)
         {
@@ -146,12 +147,13 @@ namespace MagicVillaApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns name=""></returns>
-        [Authorize]
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete("delete/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteVilla([FromRoute] int id)
         {
@@ -189,11 +191,12 @@ namespace MagicVillaApi.Controllers
         /// </summary>
         /// <param name="VillaDTO"></param>
         /// <returns name="VillaDTO"></returns>
-        [Authorize]
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut("update/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse>> UpdateVilla([FromRoute] int id, [FromBody] VillaDTO villaDTO)
         {
@@ -228,12 +231,13 @@ namespace MagicVillaApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns name=""></returns>
-        [Authorize]
+        [Authorize(Policy = "AdminOnly")]
         [HttpPatch("updatePartialVilla/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdatePartialVilla([FromRoute] int id, JsonPatchDocument<VillaDTO> jsonPatchDto)
         {
