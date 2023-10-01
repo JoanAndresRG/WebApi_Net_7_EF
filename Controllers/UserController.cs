@@ -16,18 +16,16 @@ namespace MagicVillaApi.Controllers
     {
         private readonly IUserApiService _userApiService;
         private readonly IMapper _mapper;
-        private readonly ILogger<UserController> _logger;
         protected APIResponse _apiResponse;
-        public UserController(IUserApiService userApiService, IMapper mapper, ILogger<UserController> logger)
+        public UserController(IUserApiService userApiService, IMapper mapper)
         {
             _userApiService = userApiService;
             _mapper = mapper;
-            _logger = logger;
             _apiResponse = new();
         }
 
         [Authorize(Policy = "AdminOnly")]
-        [HttpPost("createUser")]
+        [HttpPost("CreateUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -63,7 +61,7 @@ namespace MagicVillaApi.Controllers
 
 
         [Authorize(Policy = "OrAdminOrUser")]
-        [HttpGet("getUser/{id:int}", Name = "GetUser")]
+        [HttpGet("GetUser/{id:int}", Name = "GetUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -97,7 +95,7 @@ namespace MagicVillaApi.Controllers
         }
 
         [Authorize(Policy = "OrAdminOrUser")]
-        [HttpGet("getUsers")]
+        [HttpGet("GetUsers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -131,7 +129,7 @@ namespace MagicVillaApi.Controllers
         }
 
         [Authorize(Policy = "AdminOnly")]
-        [HttpPut("updateUser")]
+        [HttpPut("UpdateUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -165,7 +163,7 @@ namespace MagicVillaApi.Controllers
         }
 
         [Authorize(Policy = "AdminOnly")]
-        [HttpDelete("deleteUser/{id:int}")]
+        [HttpDelete("DeleteUser/{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

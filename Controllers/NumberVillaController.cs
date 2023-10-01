@@ -30,7 +30,7 @@ namespace MagicVillaApi.Controllers
         }
 
         [Authorize]
-        [HttpGet("getNumberVillas")]
+        [HttpGet("GetNumberVillas")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<APIResponse>> GetNumberVillas()
@@ -52,7 +52,7 @@ namespace MagicVillaApi.Controllers
         }
 
         [Authorize]
-        [HttpGet("getNumVilla/{numVilla}", Name = "GetNumbVilla")]
+        [HttpGet("GetNumberVilla/{numVilla}", Name = "GetNumbVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -93,7 +93,7 @@ namespace MagicVillaApi.Controllers
 
 
         [Authorize(Policy = "AdminOnly")]
-        [HttpPost("insertNumberVilla")]
+        [HttpPost("IsertNumberVilla")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -128,14 +128,15 @@ namespace MagicVillaApi.Controllers
             catch (Exception ex)
             {
                 _apiResponse.IsSuccessful = false;
+                _apiResponse.StatusCode = HttpStatusCode.InternalServerError;
                 _apiResponse.ErrorMesgges = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _apiResponse);
             }
-            return _apiResponse;
         }
 
 
         [Authorize(Policy = "AdminOnly")]
-        [HttpDelete("delete/{numVilla:int}")]
+        [HttpDelete("DeleteNumberVilla/{numVilla:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -175,13 +176,13 @@ namespace MagicVillaApi.Controllers
 
 
         [Authorize(Policy = "AdminOnly")]
-        [HttpPut("update/{NumVilla:int}")]
+        [HttpPut(">UpdateNumberVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> Update([FromRoute] int NumVilla, [FromBody] NumberVillaDTO numberVillaDTO)
+        public async Task<ActionResult<APIResponse>> Update([FromBody] NumberVillaDTO numberVillaDTO)
         {
             try
             {
@@ -203,9 +204,10 @@ namespace MagicVillaApi.Controllers
             catch (Exception ex)
             {
                 _apiResponse.IsSuccessful = false;
+                _apiResponse.StatusCode = HttpStatusCode.InternalServerError;
                 _apiResponse.ErrorMesgges = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _apiResponse);
             }
-            return _apiResponse;
         }
     }
 }

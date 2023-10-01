@@ -13,21 +13,19 @@ namespace MagicVillaApi.Controllers
     public class LogginController : ControllerBase
     {
         private readonly ILogginService _logginService;
-        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly IGenerateTokenJWT _generateTokenJWT;
         protected APIResponse _apiResponse;
-        public LogginController(ILogginService logginService, IConfiguration configuration, IMapper mapper, IGenerateTokenJWT generateTokenJWT)
+        public LogginController(ILogginService logginService, IMapper mapper, IGenerateTokenJWT generateTokenJWT)
         {
             _logginService = logginService;
-            _configuration = configuration;
             _apiResponse = new();
             _mapper = mapper;
             _generateTokenJWT = generateTokenJWT;
         }
 
         [AllowAnonymous]
-        [HttpPost("loggin")]
+        [HttpPost("LogginUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -62,7 +60,7 @@ namespace MagicVillaApi.Controllers
 
 
         [Authorize(Policy = "OrAdminOrUser")]
-        [HttpPut("loggin/update")]
+        [HttpPut("UpdateCredentials")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

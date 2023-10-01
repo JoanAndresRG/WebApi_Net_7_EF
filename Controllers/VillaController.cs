@@ -22,9 +22,9 @@ namespace MagicVillaApi.Controllers
 
         public VillaController(ILogger<VillaController> logger, IVillaService villaService, IMapper mapper)
         {
-            _villaService = villaService;
-            _logger = logger;
-            _mapper = mapper;
+            _villaService = villaService ?? throw new ArgumentNullException(nameof(villaService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _apiResponse = new();
         }
 
@@ -34,7 +34,7 @@ namespace MagicVillaApi.Controllers
         /// <param name=""></param>
         /// <returns name="VillaDTO"></returns> 
         [Authorize]
-        [HttpGet("getVillas")]
+        [HttpGet("GetVillas")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<APIResponse>> GetVillas()
@@ -62,7 +62,7 @@ namespace MagicVillaApi.Controllers
         /// <param name="id"></param>
         /// <returns name="VillaDTO"></returns> 
         [Authorize]
-        [HttpGet("getVilla/{id}", Name = "GetVilla")]
+        [HttpGet("GetVilla/{id}", Name = "GetVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -108,7 +108,7 @@ namespace MagicVillaApi.Controllers
         /// <param name="id"></param>
         /// <returns name="VillaDTO"></returns>
         [Authorize(Policy = "OrAdminOrUser")]
-        [HttpPost("insertVilla")]
+        [HttpPost("InsertVilla")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -148,7 +148,7 @@ namespace MagicVillaApi.Controllers
         /// <param name="id"></param>
         /// <returns name=""></returns>
         [Authorize(Policy = "AdminOnly")]
-        [HttpDelete("delete/{id:int}")]
+        [HttpDelete("DeleteVilla/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -192,7 +192,7 @@ namespace MagicVillaApi.Controllers
         /// <param name="VillaDTO"></param>
         /// <returns name="VillaDTO"></returns>
         [Authorize(Policy = "AdminOnly")]
-        [HttpPut("update/{id:int}")]
+        [HttpPut("UpdateVilla/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -232,7 +232,7 @@ namespace MagicVillaApi.Controllers
         /// <param name="id"></param>
         /// <returns name=""></returns>
         [Authorize(Policy = "AdminOnly")]
-        [HttpPatch("updatePartialVilla/{id:int}")]
+        [HttpPatch("UpdatePartialVilla/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
