@@ -22,13 +22,12 @@ namespace MagicVillaApi.Repository.Implements
         {
             try
             {
-                if (userLoginDTO.UserName == "" || userLoginDTO.Password == "") 
+                if (string.IsNullOrWhiteSpace(userLoginDTO.UserName) || string.IsNullOrWhiteSpace(userLoginDTO.Password) )
                     throw new ArgumentNullException(nameof(userLoginDTO), "Todos los campos son obligatorios");
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userLoginDTO.UserName);
-                if (user == null) 
+                User user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userLoginDTO.UserName) ??
                     throw new ArgumentException(nameof(user), "El usuario ingresado no existe");
                 string passwordDesencryt = await _encryptPasswordUser.DesEncryptPass(user.EncryptedPassword);
-                if ( userLoginDTO.Password != passwordDesencryt ) 
+                if (userLoginDTO.Password != passwordDesencryt)
                     throw new ArgumentException(nameof(user), "Credenciales invalidas");
                 return user;
             }
@@ -39,9 +38,34 @@ namespace MagicVillaApi.Repository.Implements
             }
         }
 
-        public Task<User> UpdatePassword(UserLoginDTO userLoginDTO)
+        public async Task<User> UpdateCredentials(UserLogginDTOUpdate userLogginDTOUpdate)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(userLogginDTOUpdate.OldUserName) ||
+                    string.IsNullOrWhiteSpace(userLogginDTOUpdate.NewUserName) ||
+                    string.IsNullOrWhiteSpace(userLogginDTOUpdate.OldPassword) ||
+                    string.IsNullOrWhiteSpace(userLogginDTOUpdate.NewPassword))
+                {
+                    throw new ArgumentNullException(nameof(userLogginDTOUpdate), "Todos los campos son obligatorios");
+                }
+                User user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userLogginDTOUpdate.OldUserName) ??
+                    throw new ArgumentException(nameof(user), "El usuario ingresado no existe");
+                string passwordDesencryt = await _encryptPasswordUser.DesEncryptPass(user.EncryptedPassword);
+                if (userLogginDTOUpdate.OldPassword != passwordDesencryt)
+                    throw new ArgumentException(nameof(user), "Credenciales invalidas");
+                user.UserName = userLogginDTOUpdate.NewUserName;
+                user.EncryptedPassword = await _encryptPasswordUser.EncryptPass(userLogginDTOUpdate.NewPassword);
+                user.UpdateDate = DateTime.Now;
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+                return user;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error: {ex.Message}");
+                throw;
+            }
         }
     }
 }

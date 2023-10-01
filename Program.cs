@@ -16,6 +16,8 @@ var config = builder.Configuration;
 builder.Services.AddControllers().AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+#region Swagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "MagicVillaSecurity", Version = "v1" });
@@ -52,10 +54,13 @@ builder.Services.AddSwaggerGen(c =>
         });
 }
 );
+#endregion
+
 builder.Services.AddScoped<IVillaService, VillaService>();
 builder.Services.AddScoped<INumberVillaService, NumberVillaService>();
 builder.Services.AddScoped<IUserApiService, UserApiService>();
 builder.Services.AddScoped<ILogginService, LogginService>();
+builder.Services.AddScoped<IGenerateTokenJWT, GenerateTokenJWT>();
 builder.Services.AddScoped<IEncryptPasswordUser, EncryptPasswordUser>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -63,6 +68,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
+#region AddAuthentication
 //configura el servicio de autenticación para utilizar JWT Bearer Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
@@ -78,7 +84,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         Encoding.UTF8.GetBytes(config["JWT:ClaveSecreta"]))
     };
 });
+#endregion
 
+#region AddAuthorization
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
@@ -87,6 +95,7 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole("Admin", "User");
     });
 });
+#endregion
 
 var app = builder.Build();
 

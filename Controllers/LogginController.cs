@@ -4,11 +4,7 @@ using MagicVillaApi.Models;
 using MagicVillaApi.Repository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net;
-using System.Security.Claims;
-using System.Text;
 
 namespace MagicVillaApi.Controllers
 {
@@ -19,17 +15,19 @@ namespace MagicVillaApi.Controllers
         private readonly ILogginService _logginService;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
+        private readonly IGenerateTokenJWT _generateTokenJWT;
         protected APIResponse _apiResponse;
-        public LogginController(ILogginService logginService, IConfiguration configuration, IMapper mapper)
+        public LogginController(ILogginService logginService, IConfiguration configuration, IMapper mapper, IGenerateTokenJWT generateTokenJWT)
         {
             _logginService = logginService;
             _configuration = configuration;
             _apiResponse = new();
             _mapper = mapper;
+            _generateTokenJWT = generateTokenJWT;
         }
 
-        [HttpPost("loggin")]
         [AllowAnonymous]
+        [HttpPost("loggin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -62,6 +60,33 @@ namespace MagicVillaApi.Controllers
             }
         }
 
+
+        [Authorize(Policy = "OrAdminOrUser")]
+        [HttpPut("loggin/update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<APIResponse>> UpdateCredentials( [FromBody] UserLogginDTOUpdate userLogginDTOUpdate )
+        {
+            try
+            {
+                User user = await _logginService.UpdateCredentials(userLogginDTOUpdate);
+                UserDTO userDtoRes = _mapper.Map<UserDTO>(user);
+                _apiResponse.Response = userDtoRes;
+                _apiResponse.StatusCode = HttpStatusCode.OK;
+                return CreatedAtRoute("GetUser", new { id = user.Id }, _apiResponse);
+            }
+            catch (Exception ex)
+            {
+                _apiResponse.IsSuccessful = false;
+                _apiResponse.StatusCode = HttpStatusCode.InternalServerError;
+                _apiResponse.ErrorMesgges = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _apiResponse);
+            }
+        }
+
         private async Task<User> AuthenticationUser(UserLoginDTO userLoginDTO)
         {
             return await _logginService.GetUserLoggin(userLoginDTO) ??
@@ -70,44 +95,8 @@ namespace MagicVillaApi.Controllers
 
         private async Task<User> GenerateTokenJWT(User user)
         {
-            // Header
-            var _symmetricSecurityKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(_configuration["JWT:ClaveSecreta"])
-                );
-            var _signingCredentials = new SigningCredentials(
-                    _symmetricSecurityKey, SecurityAlgorithms.HmacSha256
-                );
-            var _header = new JwtHeader(_signingCredentials);
-
-            // Claims 
-            var _claims = new[]
-            {
-                new Claim("UserName", user.UserName),
-                new Claim("Email", user.Email),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.UserRol) // Agregar el rol del usuario al token
-            };
-
-            // Payload
-
-            var _payload = new JwtPayload(
-                    issuer: _configuration["JWT:Issuer"],
-                    audience: _configuration["JWT:Audience"],
-                    claims: _claims,
-                    notBefore: DateTime.UtcNow,
-                    expires: DateTime.UtcNow.AddMinutes(30)
-            );
-
-            // Token
-
-            var _token = new JwtSecurityToken(
-                    _header,
-                    _payload
-                );
-
-            user.Token = new JwtSecurityTokenHandler().WriteToken(_token);
-
-            return user;
+            return await _generateTokenJWT.GenerateToken(user) ??
+                throw new ArgumentException(null, nameof(user));
         }
     }
 }
