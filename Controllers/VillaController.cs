@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
 using System.Net;
 
 namespace MagicVillaApi.Controllers
@@ -33,7 +35,7 @@ namespace MagicVillaApi.Controllers
         /// </summary>
         /// <param name=""></param>
         /// <returns name="VillaDTO"></returns> 
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet("GetVillas")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -61,24 +63,24 @@ namespace MagicVillaApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns name="VillaDTO"></returns> 
-        [Authorize]
-        [HttpGet("GetVilla/{id}", Name = "GetVilla")]
+        [AllowAnonymous]
+        [HttpGet("GetVilla/{nameVilla}", Name = "GetVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> GetVilla([FromRoute] int id)
+        public async Task<ActionResult<APIResponse>> GetVilla([FromRoute] string nameVilla)
         {
             try
             {
-                if (id <= 0)
+                if (nameVilla == "")
                 {
                     _logger.LogError("EL parametro de busqueda es obligatorio");
                     _apiResponse.StatusCode = HttpStatusCode.BadRequest;
                     _apiResponse.IsSuccessful = false;
                     return BadRequest(_apiResponse);
                 }
-                Villa villa = await _villaService.GetEntity(v => v.Id == id);
+                Villa villa = await _villaService.GetEntity(v => v.Name == nameVilla);
                 VillaDTO villaDTO = _mapper.Map<VillaDTO>(villa);
                 if (villaDTO == null)
                 {
@@ -107,7 +109,8 @@ namespace MagicVillaApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns name="VillaDTO"></returns>
-        [Authorize(Policy = "OrAdminOrUser")]
+        //[Authorize(Policy = "OrAdminOrUser")]
+        [AllowAnonymous]
         [HttpPost("InsertVilla")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -131,7 +134,7 @@ namespace MagicVillaApi.Controllers
                 _apiResponse.Response = villa;
                 _apiResponse.StatusCode = HttpStatusCode.Created;
 
-                return CreatedAtRoute("GetVilla", new { id = villa.Id }, _apiResponse);
+                return CreatedAtRoute("GetVilla", new { nameVilla = villa.Name }, _apiResponse);
             }
             catch (Exception ex)
             {
@@ -186,6 +189,50 @@ namespace MagicVillaApi.Controllers
             return BadRequest(_apiResponse);
         }
 
+
+        [AllowAnonymous]
+        [HttpGet("SearchVillasByPhrase/{phrase}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<APIResponse>> GetListVillas([FromRoute] string phrase)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(phrase))
+                {
+                    _apiResponse.IsSuccessful = false;
+                    _apiResponse.StatusCode = HttpStatusCode.BadRequest;
+                    _apiResponse.Response = new List<VillaDTO>();
+                    return BadRequest(_apiResponse);
+                }
+                List<Villa> listResponse = await _villaService.GetListEntities( v => v.Name.Contains(phrase) );
+                if (listResponse == null || listResponse.Count == 0)
+                {
+                    _apiResponse.IsSuccessful = true;
+                    _apiResponse.Response = new List<VillaDTO>();
+                    _apiResponse.StatusCode = HttpStatusCode.OK;
+                    return Ok(_apiResponse);
+                }
+                List<VillaDTO> villaDTOs = _mapper.Map<List<VillaDTO>>(listResponse);
+                _logger.LogInformation("Villas encontrada con exito");
+                _apiResponse.Response = villaDTOs;
+                _apiResponse.StatusCode = HttpStatusCode.OK;
+                return Ok(_apiResponse);
+
+
+            }
+            catch ( Exception ex)
+            {
+                _apiResponse.IsSuccessful = false;
+                _apiResponse.StatusCode = HttpStatusCode.InternalServerError;
+                _apiResponse.ErrorMesgges = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _apiResponse);
+            }
+
+        }
+
         /// <summary>
         /// endpoint que actualiza los datos de un registro de la tabal
         /// </summary>
@@ -231,7 +278,8 @@ namespace MagicVillaApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns name=""></returns>
-        [Authorize(Policy = "AdminOnly")]
+        //[Authorize(Policy = "AdminOnly")]
+        [AllowAnonymous]
         [HttpPatch("UpdatePartialVilla/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

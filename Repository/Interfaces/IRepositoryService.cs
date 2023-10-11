@@ -8,5 +8,6 @@ namespace MagicVillaApi.Repository.Intefaces
         public Task<T> GetEntity(Expression<Func<T, bool>> filterExp = null, bool tracked = true );
         public Task CreateEntity(T entity);
         public Task DeleteEntity(T entity);
+        public Task<List<T>> GetListEntities(Expression<Func<T, bool>>? filterExp = null);
     }
 }

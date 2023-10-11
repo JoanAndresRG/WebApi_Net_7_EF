@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "XmYJ45zPpUThSVpJrieNi+BYoEi+sHhDjlOGv5YmjrRf1QIZZ498Dih3+tYtKV9dKU1Kb/s2gbOFZXXaXKKPbA==",
+  "dgSpecHash": "6qWgrTxEsk8NSP9VMaZMUvRb11I0nqhRkeVwni3UIXGzYrTxQxfLaH08ci5d6XigePf9V+5aefQjNK4txIcNMg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\joana\\Documents\\Others\\MagicVilla\\MagicVilla.Back\\WebApi_Net_7_EF\\MagicVillaApi.csproj",
+  "projectFilePath": "C:\\Users\\joana\\Documents\\Others\\MagicVilla\\MagicVilla.Back\\WebApi_Net_7_EF\\MagicVillaApi\\MagicVillaApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\joana\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\joana\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

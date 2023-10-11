@@ -68,6 +68,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
+#region PolicyCORS
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("NewPolicyCORS", app =>
+    {
+        app.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
+#endregion
+
 #region AddAuthentication
 //configura el servicio de autenticación para utilizar JWT Bearer Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -106,9 +120,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
+app.UseCors("NewPolicyCORS");
 
 app.UseAuthorization();
 

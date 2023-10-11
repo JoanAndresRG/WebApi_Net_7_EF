@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MagicVillaApi.Repository.Intefaces;
 using System.Linq.Expressions;
+using System.Diagnostics;
 
 namespace MagicVillaApi.Repository.Implements
 {
@@ -64,6 +65,21 @@ namespace MagicVillaApi.Repository.Implements
         }
 
         public async Task<List<T>> GetEntities(Expression<Func<T, bool>>? filterExp = null)
+        {
+            try
+            {
+                IQueryable<T> query = _dbSet;
+                if (filterExp != null) query = query.Where(filterExp);
+                return await query.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error: {ex.Message}");
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
+
+        public async Task<List<T>>  GetListEntities(Expression<Func<T, bool>>? filterExp = null)
         {
             try
             {
