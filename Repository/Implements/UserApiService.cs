@@ -49,7 +49,8 @@ namespace MagicVillaApi.Repository.Implements
             {
                 if (idUser <= 0) 
                     throw new ArgumentException($"El id ingresado no es valido {idUser}.");
-                User user = await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == idUser) ?? throw new ArgumentException($"No se encontró un usuario con Id {idUser}.", nameof(idUser));
+                User user = await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == idUser) ?? 
+                        throw new ArgumentException($"No se encontró un usuario con Id {idUser}.", nameof(idUser));
                 _dbContext.Users.Remove(user);
                 await _dbContext.SaveChangesAsync();
             }

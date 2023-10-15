@@ -7,7 +7,7 @@ namespace MagicVillaApi.Repository.Interfaces
 {
     public interface IVillaService : IRepositoryService<Villa>
     {
-        public Task<Villa> UpdateVilla(Villa villa); 
-        public Task UpdatePartialVilla(int id, JsonPatchDocument<VillaDTO> villa); 
+        public Task<Villa> UpdateVilla(string name, Villa villa); 
+        public Task<Villa> UpdatePartialVilla(string name, JsonPatchDocument<VillaDTO> villa); 
     }
 }

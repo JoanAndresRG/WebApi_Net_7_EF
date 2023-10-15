@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.Collections.Generic;
 using System.Net;
 
 namespace MagicVillaApi.Controllers
@@ -130,6 +128,14 @@ namespace MagicVillaApi.Controllers
                 Villa villa = _mapper.Map<Villa>(villaDTO);
                 villa.CreationDate = DateTime.Now;
                 villa.UpdateDate = DateTime.Now;
+                var villaValid = await _villaService.GetEntity(v => v.Name.ToLower() == villa.Name.ToLower());
+                if (villaValid != null)
+                {
+                    _apiResponse.Response = HttpStatusCode.BadRequest;
+                    _apiResponse.IsSuccessful = false;
+                    _apiResponse.ErrorMesgges = new List<string>() { $"Nombre { villa.Name } no disponible" };
+                    return BadRequest(_apiResponse);
+                }
                 await _villaService.CreateEntity(villa);
                 _apiResponse.Response = villa;
                 _apiResponse.StatusCode = HttpStatusCode.Created;
@@ -238,17 +244,26 @@ namespace MagicVillaApi.Controllers
         /// </summary>
         /// <param name="VillaDTO"></param>
         /// <returns name="VillaDTO"></returns>
-        [Authorize(Policy = "AdminOnly")]
-        [HttpPut("UpdateVilla/{id:int}")]
+
+        //[Authorize(Policy = "AdminOnly")]
+        [AllowAnonymous]
+        [HttpPut("UpdateVilla/{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> UpdateVilla([FromRoute] int id, [FromBody] VillaDTO villaDTO)
+        public async Task<ActionResult<APIResponse>> UpdateVilla([FromRoute] string name, [FromBody] VillaDTO villaDTO)
         {
             try
             {
+                if (String.IsNullOrEmpty(name))
+                {
+                    _apiResponse.IsSuccessful = false;
+                    _apiResponse.StatusCode = HttpStatusCode.BadRequest;
+                    _apiResponse.ErrorMesgges = new List<string> { "Parametro name es obligatorio" };
+                    return BadRequest(_apiResponse);
+                }
                 if (!ModelState.IsValid)
                 {
                     _apiResponse.IsSuccessful = false;
@@ -256,9 +271,8 @@ namespace MagicVillaApi.Controllers
                     return BadRequest(_apiResponse);
                 }
                 Villa villa = _mapper.Map<Villa>(villaDTO);
-                villa.Id = id;
-                Villa villaRes = await _villaService.UpdateVilla(villa);
-                VillaDTO villaDtoRes = _mapper.Map<VillaDTO>(villaRes);
+                villa = await _villaService.UpdateVilla(name,villa);
+                VillaDTO villaDtoRes = _mapper.Map<VillaDTO>(villa);
                 _logger.LogInformation("Villa actualizada con exito");
                 _apiResponse.Response = villaDtoRes;
                 _apiResponse.StatusCode = HttpStatusCode.OK;
@@ -267,9 +281,10 @@ namespace MagicVillaApi.Controllers
             catch (Exception ex)
             {
                 _apiResponse.IsSuccessful = false;
-                _apiResponse.ErrorMesgges = new List<string>() { ex.ToString() };
+                _apiResponse.StatusCode = HttpStatusCode.InternalServerError;
+                _apiResponse.ErrorMesgges = new List<string>() { ex.Message.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _apiResponse);
             }
-            return _apiResponse;
         }
 
 
@@ -280,37 +295,42 @@ namespace MagicVillaApi.Controllers
         /// <returns name=""></returns>
         //[Authorize(Policy = "AdminOnly")]
         [AllowAnonymous]
-        [HttpPatch("UpdatePartialVilla/{id:int}")]
+        [HttpPatch("UpdatePartialVilla/{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdatePartialVilla([FromRoute] int id, JsonPatchDocument<VillaDTO> jsonPatchDto)
+        public async Task<IActionResult> UpdatePartialVilla([FromRoute] string name, JsonPatchDocument<VillaDTO> jsonPatchDto)
         {
             try
             {
-                if (jsonPatchDto == null || id <= 0)
+                if (jsonPatchDto == null || String.IsNullOrEmpty(name))
                 {
                     _apiResponse.IsSuccessful = false;
                     _apiResponse.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_apiResponse);
                 }
-                await _villaService.UpdatePartialVilla(id, jsonPatchDto);
-                if (!ModelState.IsValid)
+                Villa villaUpdateResp = await _villaService.UpdatePartialVilla(name, jsonPatchDto);
+                if (!ModelState.IsValid) return BadRequest(ModelState);
+                if (villaUpdateResp == null) 
                 {
-                    return BadRequest(ModelState);
+                    _apiResponse.IsSuccessful = true;
+                    _apiResponse.StatusCode = HttpStatusCode.NotFound;
+                    return Ok(_apiResponse);
                 }
                 _apiResponse.StatusCode = HttpStatusCode.NoContent;
+                _apiResponse.Response = villaUpdateResp;
                 return Ok(_apiResponse);
             }
             catch (Exception ex)
             {
                 _apiResponse.IsSuccessful = false;
+                _apiResponse.StatusCode = HttpStatusCode.InternalServerError;
                 _apiResponse.ErrorMesgges = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _apiResponse);
             }
-            return BadRequest(_apiResponse);
         }
     }
 }
