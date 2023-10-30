@@ -18,6 +18,6 @@ namespace MagicVillaApi.Models
         public string Amenity { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime UpdateDate { get; set; }
-
+        public bool StateVilla { get; set; }
     }
 }

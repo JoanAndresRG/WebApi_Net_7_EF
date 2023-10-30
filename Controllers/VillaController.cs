@@ -41,7 +41,7 @@ namespace MagicVillaApi.Controllers
         {
             try
             {
-                IEnumerable<Villa> villas = await _villaService.GetEntities();
+                IEnumerable<Villa> villas = await _villaService.GetEntities( v => v.StateVilla == true );
                 IEnumerable<VillaDTO> villasDTO = _mapper.Map<IEnumerable<VillaDTO>>(villas);
                 _apiResponse.Response = villasDTO;
                 _apiResponse.StatusCode = HttpStatusCode.OK;
@@ -156,8 +156,9 @@ namespace MagicVillaApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns name=""></returns>
-        [Authorize(Policy = "AdminOnly")]
-        [HttpDelete("DeleteVilla/{id:int}")]
+        //[Authorize(Policy = "AdminOnly")]
+        [AllowAnonymous]
+        [HttpPatch("DeleteVilla/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -51,7 +51,7 @@ namespace MagicVillaApi.Repository.Implements
         {
             try
             {
-                Villa villaSrc = await _dbContext.Villas.AsNoTracking().FirstOrDefaultAsync(v => v.Name == name) ??
+                Villa villaSrc = await _dbContext.Villas.AsNoTracking().FirstOrDefaultAsync(v => v.Name.ToLower() == name.ToLower()) ??
                     throw new ArgumentException($"No se encontró un usuario con Name {name}.", nameof(name));
                 VillaDTO villaDTO = _mapper.Map<VillaDTO>(villaSrc);
                 villa.ApplyTo(villaDTO);
